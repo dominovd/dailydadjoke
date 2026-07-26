@@ -1,0 +1,33 @@
+---
+import { fmtShort, splitLast, slugFor } from '../utils/jokes.js';
+
+interface Props {
+  joke: { date: string; setup: string; punchline: string; slug?: string };
+  badge?: string;
+  plainBadge?: boolean;
+}
+
+const { joke, badge = "TODAY'S DAD JOKE", plainBadge = false } = Astro.props;
+const slug = joke.slug ?? slugFor(joke);
+const [setupHead, setupTail] = splitLast(joke.setup, 1);
+const [punchHead, punchTail] = splitLast(joke.punchline, 2);
+---
+<article class="joke-card" id="joke-card" data-date={joke.date} data-slug={slug}>
+  <div class="badge-row">
+    <span class="sparks" aria-hidden="true">⌁⌁</span>
+    <span class={plainBadge ? 'badge-plain label' : 'badge label'} id="joke-badge">{badge} · {fmtShort(joke.date)}</span>
+    <span class="sparks" aria-hidden="true">⌁⌁</span>
+  </div>
+  <hr class="card-rule" />
+  <p class="joke-setup" id="joke-setup">
+    {setupHead}<span class="u-red">{setupTail}</span>
+  </p>
+  <p class="joke-punchline" id="joke-punchline">
+    {punchHead}<span class="u-green">{punchTail}</span>
+  </p>
+  <div class="joke-reactions">
+    <button type="button" data-react="ha"><span class="reaction-icon face-icon happy" aria-hidden="true"></span>HA!</button>
+    <button type="button" data-react="groan"><span class="reaction-icon face-icon sad" aria-hidden="true"></span>GROAN</button>
+    <button type="button" data-react="share" id="share-btn"><span class="reaction-icon share-icon" aria-hidden="true">↗</span>SHARE</button>
+  </div>
+</article>

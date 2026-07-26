@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import Mustache from '../components/Mustache.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'today' | 'archive' | 'about';
+  noindex?: boolean;
+}
+
+const {
+  title = 'Daily Dad Joke — a groan a day keeps the seriousness away',
+  description = 'One delightfully questionable dad joke, generated fresh every morning.',
+  active = 'today',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Public+Sans:wght@400;600&family=Rokkitt:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label="Daily Dad Joke — home">
+          DAILY<br /><span class="red">DAD</span><br />JOKE
+          <span class="mustache"><Mustache width={30} /></span>
+        </a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="/" class={active === 'today' ? 'active' : ''}>Today</a>
+          <a href="/archive" class={active === 'archive' ? 'active' : ''}>Archive</a>
+          <a href="/about" class={active === 'about' ? 'active' : ''}>About</a>
+        </nav>
+      </div>
+      <div class="wrap"><hr class="header-rule" /></div>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      <span class="spark">✳</span>Made with questionable judgment.<span class="spark">✳</span>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      // Tiny toast helper shared by all pages
+      let toastTimer: ReturnType<typeof setTimeout>;
+      (window as any).showToast = (msg: string) => {
+        const el = document.getElementById('toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+      };
+    </script>
+  </body>
+</html>

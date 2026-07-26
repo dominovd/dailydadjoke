@@ -1,0 +1,103 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JokeCard from '../../components/JokeCard.astro';
+import MiniJokeCard from '../../components/MiniJokeCard.astro';
+import { allJokes, fmtShort, fmtLong, INDEXABLE_JOKES } from '../../utils/jokes.js';
+
+export function getStaticPaths() {
+  const jokes = allJokes();
+  return jokes.map((joke, i) => ({
+    params: { slug: joke.slug },
+    props: {
+      joke,
+      newer: i > 0 ? jokes[i - 1] : null,
+      older: i < jokes.length - 1 ? jokes[i + 1] : null,
+      more: jokes.filter((_, j) => j !== i).slice(0, 3),
+      noindex: i >= INDEXABLE_JOKES,
+    },
+  }));
+}
+
+const { joke, newer, older, more, noindex } = Astro.props;
+---
+<Layout
+  active="archive"
+  title={`${joke.setup} — Daily Dad Joke`}
+  description={`${joke.setup} ${joke.punchline} — the Daily Dad Joke for ${fmtLong(joke.date)}.`}
+  noindex={noindex}
+>
+  <section class="hero joke-page-hero">
+    <div class="wrap">
+      <p class="crumbs label">
+        <a href="/archive">Archive</a> <span class="crumb-sep">/</span> {fmtShort(joke.date)}
+      </p>
+    </div>
+    <div class="wrap joke-page-wrap">
+      <JokeCard joke={joke} badge="THE DAILY GROAN" plainBadge />
+      <nav class="joke-nav" aria-label="Joke navigation">
+        {older ? (
+          <a class="joke-nav-date label" href={`/p/${older.slug}`}><span class="arrow">←</span> {fmtShort(older.date)}</a>
+        ) : (
+          <span></span>
+        )}
+        <a class="link-underline" href="/archive">Back to archive</a>
+        {newer ? (
+          <a class="joke-nav-date label" href={`/p/${newer.slug}`}>{fmtShort(newer.date)} <span class="arrow">→</span></a>
+        ) : (
+          <span></span>
+        )}
+      </nav>
+    </div>
+  </section>
+
+  <section class="email-band">
+    <div class="wrap">
+      <div class="email-copy">
+        <span class="email-envelope" aria-hidden="true"></span>
+        <div>
+          <h2>GET TOMORROW'S JOKE</h2>
+          <p>One fresh groan, delivered every morning.</p>
+        </div>
+      </div>
+      <form class="email-form" id="subscribe-form">
+        <input type="email" name="email" placeholder="you@email.com" required aria-label="Email address" />
+        <button class="btn btn-navy" type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="previously">
+    <div class="wrap">
+      <h2>⌁ More daily <span class="u-red">groans</span> ⌁</h2>
+      <div class="prev-grid">
+        {more.map((j) => <MiniJokeCard joke={j} />)}
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ shareText: `${joke.setup} ${joke.punchline} — Daily Dad Joke` }}>
+    document.querySelectorAll('[data-react]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const kind = btn.dataset.react;
+        if (kind === 'ha') showToast('Glad you liked it! 😄');
+        if (kind === 'groan') showToast("That's how you know it worked. ☹️");
+        if (kind === 'share') {
+          try {
+            if (navigator.share) {
+              await navigator.share({ title: 'Daily Dad Joke', text: shareText, url: location.href });
+            } else {
+              await navigator.clipboard.writeText(`${shareText}\n${location.href}`);
+              showToast('Joke + link copied to clipboard!');
+            }
+          } catch { /* user cancelled share */ }
+        }
+      });
+    });
+
+    document.getElementById('subscribe-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast('The Daily Groan is warming up — subscriptions coming soon!');
+      e.target.reset();
+    });
+  </script>
+</Layout>

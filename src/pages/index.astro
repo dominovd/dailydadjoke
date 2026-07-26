@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+import JokeCard from '../components/JokeCard.astro';
+import MiniJokeCard from '../components/MiniJokeCard.astro';
+import { allJokes, fmtShort } from '../utils/jokes.js';
+
+const jokes = allJokes();
+const today = jokes[0];
+const previous = jokes.slice(1);
+const VISIBLE = 3; // show 3 last days, the rest load on click
+---
+<Layout active="today">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker label"><span class="spark">⌁</span> Freshly generated · {fmtShort(today.date)} <span class="spark">⌁</span></p>
+        <h1>A groan a day keeps the seriousness away.</h1>
+        <p class="sub">One delightfully questionable dad joke, generated fresh every morning.</p>
+        <div class="hero-actions">
+          <button class="btn" type="button" id="another-btn">Tell me another →</button>
+          <a class="link-underline" href="/archive">Browse the archive</a>
+        </div>
+      </div>
+      <JokeCard joke={today} />
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap">
+      <div class="feature"><span class="feature-icon icon-calendar" aria-hidden="true"><span></span></span><span class="label">New joke daily</span></div>
+      <div class="feature"><span class="feature-icon icon-shield" aria-hidden="true"><span>♥</span></span><span class="label">100% family-friendly</span></div>
+      <div class="feature"><span class="feature-icon icon-seal" aria-hidden="true"><span>★</span></span><span class="label">Powered by AI, approved by dads</span></div>
+    </div>
+  </section>
+
+  <section class="email-band">
+    <div class="wrap">
+      <div class="email-copy">
+        <span class="email-envelope" aria-hidden="true"></span>
+        <div>
+          <h2>GET THE DAILY GROAN</h2>
+          <p>One fresh joke in your inbox every morning.</p>
+        </div>
+      </div>
+      <form class="email-form" id="subscribe-form">
+        <input type="email" name="email" placeholder="you@email.com" required aria-label="Email address" />
+        <button class="btn btn-navy" type="submit">SEND ME THE JOKE</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="previously">
+    <div class="wrap">
+      <h2>⌁ Previously on <span class="u-red">Dad Joke</span>... ⌁</h2>
+      <div class="prev-grid" id="prev-grid">
+        {previous.map((joke, i) => <MiniJokeCard joke={joke} hidden={i >= VISIBLE} />)}
+      </div>
+      {previous.length > VISIBLE && (
+        <div class="load-more-row">
+          <button class="btn btn-navy" type="button" id="load-more-btn">Show older groans ↓</button>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ jokes, VISIBLE }}>
+    const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const fmtShort = (d) => {
+      const [, m, day] = d.split('-').map(Number);
+      return `${MONTHS[m - 1]} ${day}`;
+    };
+    const splitLast = (text, n) => {
+      const words = text.trim().split(/\s+/);
+      if (words.length <= n) return ['', text.trim()];
+      return [words.slice(0, -n).join(' ') + ' ', words.slice(-n).join(' ')];
+    };
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    // --- Tell me another: show a random joke from the vault ---
+    const card = document.getElementById('joke-card');
+    const badgeEl = document.getElementById('joke-badge');
+    const setupEl = document.getElementById('joke-setup');
+    const punchEl = document.getElementById('joke-punchline');
+
+    document.getElementById('another-btn')?.addEventListener('click', () => {
+      const current = card.dataset.date;
+      const pool = jokes.filter((j) => j.date !== current);
+      if (!pool.length) return;
+      const joke = pool[Math.floor(Math.random() * pool.length)];
+      card.dataset.date = joke.date;
+      card.dataset.slug = joke.slug;
+      const isToday = joke.date === jokes[0].date;
+      badgeEl.textContent = `${isToday ? "TODAY'S DAD JOKE" : 'DAILY DAD JOKE · FROM THE VAULT'} · ${fmtShort(joke.date)}`;
+      const [sh, st] = splitLast(joke.setup, 1);
+      const [ph, pt] = splitLast(joke.punchline, 2);
+      setupEl.innerHTML = `${esc(sh)}<span class="u-red">${esc(st)}</span>`;
+      punchEl.innerHTML = `${esc(ph)}<span class="u-green">${esc(pt)}</span>`;
+    });
+
+    // --- Reactions ---
+    document.querySelectorAll('[data-react]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const kind = btn.dataset.react;
+        if (kind === 'ha') showToast('Glad you liked it! 😄');
+        if (kind === 'groan') showToast("That's how you know it worked. ☹️");
+        if (kind === 'share') {
+          const text = `${setupEl.textContent} ${punchEl.textContent} — Daily Dad Joke`;
+          const url = `${location.origin}/p/${card.dataset.slug}`;
+          try {
+            if (navigator.share) {
+              await navigator.share({ title: 'Daily Dad Joke', text, url });
+            } else {
+              await navigator.clipboard.writeText(`${text}\n${url}`);
+              showToast('Joke + link copied to clipboard!');
+            }
+          } catch { /* user cancelled share */ }
+        }
+      });
+    });
+
+    // --- Load more: reveal 3 older days per click ---
+    const loadBtn = document.getElementById('load-more-btn');
+    loadBtn?.addEventListener('click', () => {
+      const hiddenCards = document.querySelectorAll('#prev-grid .mini-card[hidden]');
+      Array.from(hiddenCards).slice(0, 3).forEach((el) => el.removeAttribute('hidden'));
+      if (hiddenCards.length <= 3) loadBtn.closest('.load-more-row').remove();
+    });
+
+    // --- Subscribe form ---
+    document.getElementById('subscribe-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast("You're on the Daily Groan list! 📬");
+      e.target.reset();
+    });
+  </script>
+</Layout>

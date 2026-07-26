@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MiniJokeCard from '../components/MiniJokeCard.astro';
+import { allJokes, fmtShort } from '../utils/jokes.js';
+
+const jokes = allJokes();
+const VISIBLE = 9;
+---
+<Layout active="archive" title="The Archive — Daily Dad Joke">
+  <section class="page-hero">
+    <div class="wrap">
+      <h1>The Groan Archive</h1>
+      <p>Every Daily Dad Joke ever inflicted, preserved for future generations.</p>
+      <div class="search-row">
+        <input
+          type="search"
+          id="joke-search"
+          placeholder="Search the groans… (e.g. cheese, JUL 24)"
+          aria-label="Search jokes"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="archive-section">
+    <div class="wrap">
+      <div class="prev-grid" id="archive-grid">
+        {jokes.map((joke, i) => <MiniJokeCard joke={joke} hidden={i >= VISIBLE} />)}
+      </div>
+      <p class="no-results" id="no-results" hidden>No groans found. Try another word — or lower your standards. 🥸</p>
+      <div class="load-more-row" id="load-more-row" hidden={jokes.length <= VISIBLE}>
+        <button class="btn btn-navy" type="button" id="archive-more-btn">Show older groans ↓</button>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ VISIBLE }}>
+    const cards = Array.from(document.querySelectorAll('#archive-grid .mini-card'));
+    const moreRow = document.getElementById('load-more-row');
+    const moreBtn = document.getElementById('archive-more-btn');
+    const noResults = document.getElementById('no-results');
+    const searchInput = document.getElementById('joke-search');
+
+    // Pre-compute searchable text per card (joke text + short date like "JUL 24")
+    const haystacks = cards.map((c) => c.textContent.replace(/\s+/g, ' ').toLowerCase());
+
+    let revealed = VISIBLE;
+
+    function apply() {
+      const q = searchInput.value.trim().toLowerCase();
+      let shown = 0;
+      cards.forEach((card, i) => {
+        const visible = q ? haystacks[i].includes(q) : shown < revealed && i < revealed;
+        card.toggleAttribute('hidden', !visible);
+        if (visible) shown++;
+      });
+      noResults.toggleAttribute('hidden', shown > 0);
+      const canLoadMore = !q && revealed < cards.length;
+      moreRow.toggleAttribute('hidden', !canLoadMore);
+    }
+
+    searchInput.addEventListener('input', apply);
+    moreBtn.addEventListener('click', () => {
+      revealed = Math.min(revealed + 9, cards.length);
+      apply();
+    });
+  </script>
+</Layout>

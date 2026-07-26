@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+_to_delete/
+
+# design mockups (keep them local, too heavy for the repo)
+daily-dad-joke-*.png

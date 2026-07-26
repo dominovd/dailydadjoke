@@ -1,0 +1,25 @@
+---
+import Mustache from './Mustache.astro';
+import { fmtShort, slugFor } from '../utils/jokes.js';
+
+interface Props {
+  joke: { date: string; setup: string; punchline: string; slug?: string };
+  hidden?: boolean;
+}
+
+const { joke, hidden = false } = Astro.props;
+const slug = joke.slug ?? slugFor(joke);
+---
+<a class="mini-card" href={`/p/${slug}`} data-joke-date={joke.date} hidden={hidden}>
+  <div class="mini-head">
+    <span class="mini-date label">{fmtShort(joke.date)}</span>
+    <span class="rule"></span>
+    <span class="mini-brand label">Daily Dad Joke</span>
+  </div>
+  <p>{joke.setup} {joke.punchline}</p>
+  <div class="mini-foot">
+    <span class="rule"></span>
+    <span class="mustache"><Mustache width={26} /></span>
+    <span class="rule"></span>
+  </div>
+</a>

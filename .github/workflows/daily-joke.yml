@@ -1,0 +1,37 @@
+name: Daily joke
+
+on:
+  schedule:
+    # 05:30 UTC every day = early morning in Europe, before people check the site.
+    - cron: '30 5 * * *'
+  workflow_dispatch: {} # allows manual runs from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generate today's joke
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-joke.mjs
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet src/data/jokes.json; then
+            echo "No new joke to commit."
+            exit 0
+          fi
+          git config user.name "daily-joke-bot"
+          git config user.email "bot@dailydadjoke.app"
+          git add src/data/jokes.json
+          git commit -m "joke: $(date -u +%F)"
+          git push
