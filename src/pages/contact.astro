@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Mustache from '../components/Mustache.astro';
+
+const EMAIL = 'info@dailydadjoke.app';
+---
+<Layout
+  active="contact"
+  title="Contact — Daily Dad Joke"
+  description="Questions, compliments, complaints about pun quality — write to the Daily Dad Joke team."
+>
+  <section class="page-hero contact-hero">
+    <div class="wrap">
+      <p class="page-kicker label">THE DAD-LINE IS OPEN</p>
+      <h1>Say hello</h1>
+      <p>Questions, compliments, joke submissions, or complaints about pun quality.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="wrap contact-layout">
+      <div class="contact-side">
+        <div class="contact-card">
+          <span class="email-envelope contact-envelope" aria-hidden="true"></span>
+          <p class="contact-label label">Prefer regular email?</p>
+          <a class="contact-email" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          <div class="mini-foot contact-foot">
+            <span class="rule"></span>
+            <span class="mustache"><Mustache width={30} /></span>
+            <span class="rule"></span>
+          </div>
+          <p class="contact-note">
+            We read every message. Especially the ones containing a joke so bad
+            that it circles all the way back to good.
+          </p>
+        </div>
+
+        <aside class="submission-note">
+          <p class="label">SUBMITTING A JOKE?</p>
+          <p>Include the setup, punchline, and how you’d like to be credited. Keep it short and family-friendly.</p>
+        </aside>
+      </div>
+
+      <form class="contact-form" id="contact-form">
+        <div class="form-heading">
+          <p class="label">SEND A NOTE</p>
+          <h2>What’s on your mind?</h2>
+        </div>
+        <div class="field-row">
+          <label>
+            <span>Your name</span>
+            <input name="name" autocomplete="name" placeholder="Dad, probably" required />
+          </label>
+          <label>
+            <span>Your email</span>
+            <input type="email" name="email" autocomplete="email" placeholder="you@email.com" required />
+          </label>
+        </div>
+        <label>
+          <span>What is this about?</span>
+          <select name="topic">
+            <option>General question</option>
+            <option>I have a dad joke</option>
+            <option>Partnership or press</option>
+            <option>Something is not working</option>
+          </select>
+        </label>
+        <label>
+          <span>Your message</span>
+          <textarea name="message" rows="6" placeholder="Write the setup here. We’re already bracing for the punchline…" required></textarea>
+        </label>
+        <button class="btn" type="submit">Open email draft →</button>
+        <p class="form-note">This opens your email app. Nothing is sent until you press Send.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="contact-faq">
+    <div class="wrap">
+      <h2 class="section-title">Frequently groaned questions</h2>
+      <div class="faq-grid">
+        <article>
+          <h3>Can I submit my own joke?</h3>
+          <p>Absolutely. Send the setup and punchline through the form above. Original, concise, family-friendly jokes work best.</p>
+        </article>
+        <article>
+          <h3>Will every submission be published?</h3>
+          <p>No promises. We choose jokes for clarity, kindness, originality, and their ability to produce a respectable eye-roll.</p>
+        </article>
+        <article>
+          <h3>Can I share jokes from the site?</h3>
+          <p>Yes — use the Share button on any joke card and keep the Daily Dad Joke link attached.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ EMAIL }}>
+    document.getElementById('contact-form')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const data = new FormData(form);
+      const subject = `[${data.get('topic')}] Message from ${data.get('name')}`;
+      const body = `Name: ${data.get('name')}\nEmail: ${data.get('email')}\n\n${data.get('message')}`;
+      window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  </script>
+</Layout>

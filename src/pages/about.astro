@@ -2,29 +2,83 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout active="about" title="About — Daily Dad Joke">
-  <section class="page-hero">
+  <section class="page-hero about-hero">
     <div class="wrap">
+      <p class="page-kicker label">OUR EXTREMELY SERIOUS MISSION</p>
       <h1>About Daily Dad Joke</h1>
-      <p>The internet's most reliable source of secondhand embarrassment.</p>
+      <p>Making mornings lighter, one questionable punchline at a time.</p>
     </div>
   </section>
 
-  <div class="prose">
-    <p>
-      Every morning, Daily Dad Joke serves exactly one joke. Not two. Not a feed.
-      One. Because a dad joke, like a strong cup of coffee, is best taken in a
-      single, slightly painful dose.
-    </p>
-    <p>
-      Our jokes are 100% family-friendly, rigorously groan-tested, and certified
-      by a panel of dads who nodded slowly and said "that's a good one" without
-      smiling.
-    </p>
-    <p>
-      If a joke made you exhale slightly harder through your nose, our work here
-      is done. If it made you groan out loud — even better. That's how you know
-      it worked.
-    </p>
-    <p class="sig">— The Daily Dad Joke team ✳</p>
-  </div>
+  <main class="about-page">
+    <section class="about-intro wrap">
+      <div class="about-statement">
+        <span class="burst-lines" aria-hidden="true">⌁</span>
+        <h2>One joke.<br />Every morning.<br /><span>Zero dignity.</span></h2>
+      </div>
+      <div class="about-copy">
+        <p class="lead">
+          Daily Dad Joke is a tiny daily ritual for people who believe the world
+          could use fewer serious notifications and more terrible puns.
+        </p>
+        <p>
+          We publish exactly one fresh, family-friendly joke each morning.
+          No endless feed, no doom-scrolling, and no twelve-paragraph setup.
+          Just a clean punchline you can share at breakfast, in the group chat,
+          or with an unsuspecting coworker.
+        </p>
+        <p>
+          Some jokes are written, some are discovered, and some arrive wearing
+          white sneakers with grass stains. Every one is checked for clarity,
+          kindness, and the all-important groan factor.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-process">
+      <div class="wrap">
+        <h2 class="section-title">How a groan gets made</h2>
+        <div class="process-grid">
+          <article class="process-card">
+            <span class="step-number label">01</span>
+            <h3>Find the setup</h3>
+            <p>A familiar situation, a harmless question, and just enough suspense.</p>
+          </article>
+          <article class="process-card">
+            <span class="step-number label">02</span>
+            <h3>Polish the pun</h3>
+            <p>We trim every extra word until the punchline lands with maximum eye-roll.</p>
+          </article>
+          <article class="process-card">
+            <span class="step-number label">03</span>
+            <h3>Release the groan</h3>
+            <p>The chosen joke appears on the homepage and joins the archive the next day.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-values wrap">
+      <div class="value-item">
+        <span class="feature-icon icon-calendar" aria-hidden="true"><span></span></span>
+        <div><h3>Fresh daily</h3><p>A small reason to come back tomorrow.</p></div>
+      </div>
+      <div class="value-item">
+        <span class="feature-icon icon-shield" aria-hidden="true"><span>♥</span></span>
+        <div><h3>Family-friendly</h3><p>Safe for kids, coworkers, and family group chats.</p></div>
+      </div>
+      <div class="value-item">
+        <span class="feature-icon icon-seal" aria-hidden="true"><span>★</span></span>
+        <div><h3>Groan-approved</h3><p>If it earns an eye-roll, it earns a place here.</p></div>
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <div class="wrap">
+        <p class="label">OUR QUALITY GUARANTEE</p>
+        <h2>If you groaned, it worked.</h2>
+        <a class="btn btn-navy" href="/">Read today’s joke →</a>
+      </div>
+    </section>
+  </main>
 </Layout>

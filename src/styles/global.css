@@ -956,3 +956,320 @@ body::before {
   .joke-page-wrap .joke-card { padding-inline: 20px; }
   .joke-nav { align-items: stretch; flex-direction: column; text-align: center; }
 }
+
+/* ---------- About & Contact pages (Denis) ---------- */
+
+.page-hero .page-kicker {
+  color: var(--red);
+  font-size: 0.88rem;
+  margin-bottom: 8px;
+}
+
+/* ---------- About page ---------- */
+
+.about-page { background: var(--cream); }
+
+.about-intro {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 82px;
+  align-items: center;
+  padding-top: 52px;
+  padding-bottom: 58px;
+  max-width: 1120px;
+}
+
+.about-statement {
+  position: relative;
+  padding-left: 28px;
+}
+
+.about-statement::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-left: 5px solid var(--red);
+}
+
+.about-statement .burst-lines {
+  position: absolute;
+  color: var(--red);
+  font-size: 2rem;
+  left: -18px;
+  top: -25px;
+}
+
+.about-statement h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4.4rem);
+  line-height: 0.92;
+}
+
+.about-statement h2 span { color: var(--red); }
+
+.about-copy {
+  font-size: 1.06rem;
+  max-width: 58ch;
+}
+
+.about-copy p + p { margin-top: 17px; }
+
+.about-copy .lead {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.45rem;
+  line-height: 1.25;
+}
+
+.about-process {
+  border-block: 3px solid var(--navy);
+  background: var(--yellow);
+  padding: 34px 0 40px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.process-grid,
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.process-card {
+  position: relative;
+  background: var(--cream);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  padding: 26px 24px 22px;
+  box-shadow: 5px 5px 0 rgba(19, 42, 71, 0.24);
+}
+
+.step-number {
+  display: inline-block;
+  color: var(--cream);
+  background: var(--red);
+  padding: 3px 9px;
+  margin-bottom: 14px;
+}
+
+.process-card h3,
+.value-item h3,
+.faq-grid h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+
+.about-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px;
+  padding-top: 40px;
+  padding-bottom: 42px;
+}
+
+.value-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.value-item p { font-size: 0.94rem; }
+
+.about-cta {
+  background: var(--red);
+  color: var(--cream);
+  text-align: center;
+  padding: 28px 0 32px;
+  border-top: 3px solid var(--navy);
+}
+
+.about-cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1;
+  margin: 6px 0 18px;
+}
+
+/* ---------- Contact page ---------- */
+
+.contact-section { padding: 48px 0 52px; }
+
+.contact-layout {
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: 54px;
+  align-items: start;
+}
+
+.contact-side {
+  display: grid;
+  gap: 24px;
+}
+
+.contact-card {
+  background: var(--cream);
+  border: 3px solid var(--navy);
+  border-radius: 14px;
+  padding: 32px 28px 28px;
+  box-shadow: 8px 8px 0 rgba(34, 48, 78, 0.22);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.contact-envelope {
+  border-color: var(--red);
+}
+
+.contact-envelope::before,
+.contact-envelope::after {
+  background: var(--red);
+}
+
+.contact-label {
+  color: var(--red);
+  font-size: 0.95rem;
+}
+
+.contact-email {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 4.5vw, 1.9rem);
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 7px;
+  word-break: break-all;
+}
+
+.contact-email:hover { color: var(--red); }
+
+.contact-foot { width: 60%; margin-top: 4px; }
+
+.contact-note {
+  max-width: 40ch;
+  font-size: 1.02rem;
+}
+
+.submission-note {
+  background: var(--yellow);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  padding: 20px 22px;
+  box-shadow: 4px 4px 0 rgba(19, 42, 71, 0.2);
+}
+
+.submission-note .label {
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+.contact-form {
+  background: var(--cream);
+  border: 3px solid var(--navy);
+  border-radius: 10px;
+  padding: 30px 32px 28px;
+  box-shadow: 8px 8px 0 rgba(19, 42, 71, 0.22);
+}
+
+.form-heading { margin-bottom: 20px; }
+
+.form-heading .label { color: var(--red); font-size: 0.88rem; }
+
+.form-heading h2 {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  background: #fffaf0;
+  color: var(--navy);
+  border: 2px solid var(--navy);
+  border-radius: 4px;
+  padding: 11px 13px;
+  font: 1rem var(--font-body);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: 3px solid var(--red);
+  outline-offset: 1px;
+}
+
+.contact-form .btn { margin-top: 2px; }
+
+.form-note {
+  font-size: 0.82rem;
+  opacity: 0.72;
+  margin-top: 12px;
+}
+
+.contact-faq {
+  border-top: 3px solid var(--navy);
+  background: var(--yellow);
+  padding: 34px 0 42px;
+}
+
+.faq-grid article {
+  background: var(--cream);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  padding: 22px;
+}
+
+@media (max-width: 620px) {
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .contact-form { padding: 24px 20px; }
+  .about-intro { padding-top: 36px; padding-bottom: 38px; }
+}
+
+@media (max-width: 900px) {
+  .about-intro,
+  .contact-layout { grid-template-columns: 1fr; gap: 34px; }
+  .about-values { grid-template-columns: 1fr; gap: 24px; }
+  .process-grid,
+  .faq-grid { grid-template-columns: 1fr; }
+}
+
+/* mobile fix: badge must not stretch the hero grid beyond the viewport */
+@media (max-width: 620px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .badge, .badge-plain { white-space: normal; text-align: center; }
+  .sparks { display: none; }
+}

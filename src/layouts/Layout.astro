@@ -5,7 +5,7 @@ import Mustache from '../components/Mustache.astro';
 interface Props {
   title?: string;
   description?: string;
-  active?: 'today' | 'archive' | 'about';
+  active?: 'today' | 'archive' | 'about' | 'contact';
   noindex?: boolean;
 }
 
@@ -46,6 +46,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           <a href="/" class={active === 'today' ? 'active' : ''}>Today</a>
           <a href="/archive" class={active === 'archive' ? 'active' : ''}>Archive</a>
           <a href="/about" class={active === 'about' ? 'active' : ''}>About</a>
+          <a href="/contact" class={active === 'contact' ? 'active' : ''}>Contact</a>
         </nav>
       </div>
       <div class="wrap"><hr class="header-rule" /></div>
