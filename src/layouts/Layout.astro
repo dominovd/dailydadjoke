@@ -27,6 +27,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="google-site-verification" content="rWxMOPa901x0I45eGo7wI8rAsbLPm1TartinYFvKZ7A" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,6 +57,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     <footer class="site-footer">
       <span class="spark">✳</span>Made with questionable judgment.<span class="spark">✳</span>
+      <a class="footer-link" href="/contact">Contact us</a>
     </footer>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -72,5 +74,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
       };
     </script>
+
+    <!-- Vercel Web Analytics (no Speed Insights) -->
+    <script is:inline>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script is:inline defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>
